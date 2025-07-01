@@ -1,0 +1,43 @@
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+enum Role {
+    USER
+    EMPLOYEE
+    ADMIN
+}
+
+model User {
+    id            String    @id @default(uuid())
+    firstName     String
+    lastName      String
+    username      String?   @default("None")
+    email         String    @unique
+    password      String
+    secretCode    String?
+    role          Role      @default(USER)
+    agree         Boolean
+    readGuideline Boolean
+    accounts      Account[] @relation("UserAccounts")
+    createdAt     DateTime  @default(now())
+    updatedAt     DateTime  @updatedAt
+}
+
+model Account {
+  id            String   @id @default(uuid())
+  userId        String
+  userVerified  Boolean  @default(false)
+  accessToken   String?
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User @relation("UserAccounts", fields: [userId], references: [id])
+}
