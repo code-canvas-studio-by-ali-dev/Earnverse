@@ -1,4 +1,5 @@
 onlyBuiltDependencies:
+  - '@fingerprintjs/fingerprintjs-pro-react'
   - '@prisma/client'
   - '@prisma/engines'
   - '@tailwindcss/oxide'

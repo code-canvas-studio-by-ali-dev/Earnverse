@@ -1,119 +1,252 @@
-"use client"
+import HeroSection from "@/components/layout/landing/Hero";
+import Navbar from "@/components/layout/landing/Navbar";
+import React from "react";
 
-import { getFingerprint } from "@/lib/fingerprint";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-
-export default function Home() {
-  const [data, setData] = useState<{ visitorId: string; isBot: boolean; botConfidence: string | null } | null>(null);
-
-  useEffect(() => {
-    async function fetchFingerprint() {
-      const result = await getFingerprint();
-      setData(result);
-    }
-    fetchFingerprint();
-  }, []);
-
-  console.log(data)
-  
+const App = () => {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div
+      data-theme="corporate"
+      className="min-h-screen bg-base-100 text-base-content"
+    >
+      {/* Navigation */}
+      <Navbar />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* Hero Section */}
+      <HeroSection />
+
+      {/* Features Section */}
+      <section id="features" className="py-20 bg-base-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Why Choose Earnverse?
+            </h2>
+            <p className="text-base-content/70 max-w-2xl mx-auto">
+              We provide a halal way to earn online through verified tasks and
+              advertisements
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Halal Earning",
+                description:
+                  "All our earning methods are verified to be Sharia compliant",
+              },
+              {
+                title: "No Investment Required",
+                description: "Start earning with just your time and smartphone",
+              },
+              {
+                title: "Instant Withdrawals",
+                description:
+                  "Withdraw your earnings instantly via popular payment methods",
+              },
+            ].map((feature, index) => (
+              <div
+                key={index}
+                className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow"
+              >
+                <div className="card-body">
+                  <h3 className="card-title">{feature.title}</h3>
+                  <p>{feature.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </section>
+
+      {/* How It Works Section */}
+      <section id="how-it-works" className="py-20 bg-base-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              How It Works
+            </h2>
+            <p className="text-base-content/70 max-w-2xl mx-auto">
+              Start earning in just a few simple steps
+            </p>
+          </div>
+
+          <div className="steps steps-horizontal w-full justify-around mb-8">
+            <div className="step step-primary">
+              <div className="text-center">
+                <div className="step-number">1</div>
+                <div className="font-medium">Sign Up</div>
+              </div>
+            </div>
+            <div className="step step-primary">
+              <div className="text-center">
+                <div className="step-number">2</div>
+                <div className="font-medium">Complete Tasks</div>
+              </div>
+            </div>
+            <div className="step step-primary">
+              <div className="text-center">
+                <div className="step-number">3</div>
+                <div className="font-medium">Watch Ads</div>
+              </div>
+            </div>
+            <div className="step step-primary">
+              <div className="text-center">
+                <div className="step-number">4</div>
+                <div className="font-medium">Withdraw</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section id="testimonials" className="py-20 bg-base-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              What Our Users Say
+            </h2>
+            <p className="text-base-content/70 max-w-2xl mx-auto">
+              Real stories from our community members
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                name: "Muhammad Ali",
+                testimonial:
+                  "Earnverse has helped me pay my university fees. I complete tasks during breaks and earn decent money without any hassle.",
+              },
+              {
+                name: "Ayesha Khan",
+                testimonial:
+                  "As a homemaker, this platform gives me financial independence. I earn while managing household chores.",
+              },
+              {
+                name: "Zain Ahmed",
+                testimonial:
+                  "I use Earnverse as an additional income source. The interface is smooth and payments are always on time.",
+              },
+            ].map((testimonial, index) => (
+              <div key={index} className="card bg-base-100 shadow-xl">
+                <div className="card-body">
+                  <p className="mb-4 italic">"{testimonial.testimonial}"</p>
+                  <h4 className="font-semibold">{testimonial.name}</h4>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-base-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="card bg-primary text-primary-content shadow-xl">
+            <div className="card-body">
+              <h2 className="card-title text-3xl md:text-4xl">
+                Ready to Start Your Journey?
+              </h2>
+              <p>
+                Join thousands of users who are already earning through our
+                halal methods.
+              </p>
+              <form
+                // onSubmit={handleSubmit}
+                className="form-control mt-4 flex flex-col sm:flex-row gap-4"
+              >
+                <input
+                  type="email"
+                  // value={email}
+                  // onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email address"
+                  className="input input-bordered w-full"
+                  required
+                />
+                <button type="submit" className="btn btn-secondary">
+                  Get Early Access
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section id="faq" className="py-20 bg-base-200">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-base-content/70">
+              Got questions? We've got answers!
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {[
+              {
+                q: "Is Earnverse really halal?",
+                a: "Yes! All our earning methods are carefully reviewed to ensure they comply with Islamic principles.",
+              },
+              {
+                q: "How much can I earn?",
+                a: "Your earnings depend on how much time you invest. On average, users earn between PKR 500-2000 daily.",
+              },
+              {
+                q: "Are there any charges or fees?",
+                a: "No! There are absolutely no charges to join or use our platform.",
+              },
+              {
+                q: "How do I withdraw my earnings?",
+                a: "You can withdraw instantly via JazzCash, Easypaisa, and bank transfers.",
+              },
+              {
+                q: "Do I need any special skills?",
+                a: "No special skills are required. Just follow instructions and start earning!",
+              },
+            ].map((item, index) => (
+              <details
+                key={index}
+                className="collapse collapse-arrow bg-base-100"
+              >
+                <summary className="collapse-title text-lg font-medium">
+                  {item.q}
+                </summary>
+                <div className="collapse-content">
+                  <p>{item.a}</p>
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="footer footer-bg bg-base-300 text-base-content p-10">
+        <div>
+          <span className="footer-title">Earnverse</span>
+          <a className="link link-hover">About Us</a>
+          <a className="link link-hover">Careers</a>
+          <a className="link link-hover">Blog</a>
+        </div>
+        <div>
+          <span className="footer-title">Legal</span>
+          <a className="link link-hover">Terms of Service</a>
+          <a className="link link-hover">Privacy Policy</a>
+          <a className="link link-hover">Refund Policy</a>
+        </div>
+        <div>
+          <span className="footer-title">Support</span>
+          <a className="link link-hover">Contact Us</a>
+          <a className="link link-hover">FAQ</a>
+          <a className="link link-hover">Help Center</a>
+        </div>
       </footer>
     </div>
   );
-}
+};
+
+export default App;

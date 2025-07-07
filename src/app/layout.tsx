@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import { ReCaptchaProvider } from "next-recaptcha-v3";
+import { DisableInspectRightClick } from "@/utils/disability";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const SpaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-space-grotesk",
 });
 
 export const metadata: Metadata = {
@@ -23,10 +21,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <html lang="en" data-theme="corporate">
+      <body className={`${SpaceGrotesk.className} antialiased select-none`}>
+        <DisableInspectRightClick />
         {children}
       </body>
     </html>
