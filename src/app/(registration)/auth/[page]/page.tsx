@@ -15,7 +15,7 @@ interface AuthProps {
 }
 
 // meta tags
-export async function generateMetadata({ params }: Readonly<AuthProps>): Promise<Metadata> {
+export async function generateMetadata({ params }: AuthProps): Promise<Metadata> {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
     const { page } = await params;
 
@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: Readonly<AuthProps>): Promise
 }
 
 const SignupPage = async (
-    { params }: Readonly<AuthProps>
+    { params }: AuthProps
 ) => {
     const { page } = await params
 
