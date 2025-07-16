@@ -83,7 +83,7 @@ export function LoginForm() {
                         type="checkbox"
                         id="showPassword"
                         checked={showPassword}
-                        onChange={(e) => setShowPassword(!showPassword)}
+                        onChange={() => setShowPassword(!showPassword)}
                         className="checkbox checkbox-xs rounded-none"
                     />
                     <span className="label-text text-xs">

@@ -18,9 +18,9 @@ function generateUsername({ firstName, lastName }: { firstName: string; lastName
 
 export function Steps({
     type,
-}: Readonly<{
+}: {
     type: "step-one" | "step-two";
-}>) {
+}) {
     const [data, setData] = useState<StepOneData>({
         firstName: "Ali",
         lastName: "Sulman",
@@ -74,7 +74,7 @@ export function Steps({
                 setSubStep(3); // Done
             }, 2000);
         }
-    }, [type]);
+    }, [type, data]);
 
     return (
         <Fragment>
