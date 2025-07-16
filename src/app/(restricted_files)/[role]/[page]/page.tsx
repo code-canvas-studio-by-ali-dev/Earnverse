@@ -5,7 +5,7 @@ import { Fragment } from "react";
 export default async function Page({
     params,
 }: {
-    params: { role: string; page: string };
+    params: Promise<{ role: string; page: string }>;
 }) {
     const { role, page } = await params;
 

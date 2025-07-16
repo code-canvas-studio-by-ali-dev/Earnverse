@@ -3,9 +3,7 @@ import { Fragment } from "react";
 
 export default async function Page(
     { params }: {
-        params: {
-            step: "step-one" | "step-two"
-        }
+        params: Promise<{ step: "step-one" | "step-two" }>
     }
 ) {
 

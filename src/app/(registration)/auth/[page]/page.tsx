@@ -8,14 +8,8 @@ import Form from "@/components/Form";
 import { Metadata } from "next";
 import Script from "next/script";
 
-interface AuthProps {
-    params: {
-        page: "login" | "signup"
-    }
-}
-
 // meta tags
-export async function generateMetadata({ params }: AuthProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ page: "signup" | "login" }> }): Promise<Metadata> {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
     const { page } = await params;
 
@@ -45,7 +39,7 @@ export async function generateMetadata({ params }: AuthProps): Promise<Metadata>
 }
 
 const SignupPage = async (
-    { params }: AuthProps
+    { params }: { params: Promise<{ page: "signup" | "login" }> }
 ) => {
     const { page } = await params
 
