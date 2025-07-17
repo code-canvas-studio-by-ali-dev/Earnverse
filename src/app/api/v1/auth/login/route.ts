@@ -11,14 +11,12 @@ interface AuthReq {
     ipData: object;
 }
 
-export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(req: NextRequest) {
     try {
-        const { id } = await params;
-        const userId = z.uuid({ message: "Invalid user ID" }).parse(id);
         const body: AuthReq = await req.json();
 
         const user = await prisma.user.findUnique({
-            where: { id: userId },
+            where: { username: body.username},
         });
 
         if (!user) {
@@ -30,7 +28,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
         const result = await prisma.$transaction(async (tx) => {
             const updatedUser = await tx.user.update({
-                where: { id: userId },
+                where: { id: user.id },
                 data: {
                     username: body.username,
                 },
