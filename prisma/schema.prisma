@@ -1,0 +1,122 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  EMPLOYEE
+  ADMIN
+}
+
+// User Model (Central User Entity)
+model User {
+  id         String   @id @default(uuid())
+  username   String?  @unique
+  email      String   @unique
+  password   String
+  secretCode Int?     @unique
+  role       Role
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relationships
+  security           Security?
+  profile            Profile?
+  account            Account?
+  loginHistory       LoginHistory[]
+  browserInfo        BrowserInfo[]
+  geographicLocation GeographicLocation[]
+
+  @@index([email])
+  @@index([username])
+  @@index([createdAt])
+  @@index([updatedAt])
+}
+
+// Security Model (One-to-one with User)
+model Security {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  visitorId String
+  ips       String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// Profile Model (One-to-one with User)
+model Profile {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  firstName String
+  lastName  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// Account Model (One-to-one with User)
+model Account {
+  id           String   @id @default(uuid())
+  userId       String   @unique
+  user         User     @relation(fields: [userId], references: [id])
+  guidelines   Boolean
+  terms        Boolean
+  isActive     Boolean  @default(false)
+  isVerified   Boolean  @default(false)
+  isBanned     Boolean  @default(false)
+  bannedReason String?
+  accessToken  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// LoginHistory Model (Many-to-one with User)
+model LoginHistory {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  browserInfo String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+// BrowserInfo Model (Many-to-one with User) — now uses JSON structure
+model BrowserInfo {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  data      Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// GeographicLocation Model (Many-to-one with User)
+model GeographicLocation {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  data      Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([createdAt])
+}

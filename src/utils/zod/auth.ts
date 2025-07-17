@@ -22,6 +22,7 @@ export const signupSchema = z.object({
         message:
             "Password must be 8+ chars with uppercase, lowercase, number, and symbol (no accents).",
     }),
+    secretCode: z.number().min(6, "Secret code must be 6 digits."),
     agreeTerms: z.boolean().refine((val) => val === true, {
         message: "You must accept the Terms of Use",
     }),
@@ -37,4 +38,12 @@ export const stepOneSchema = z.object({
     lastName: z
         .string()
         .min(2, { message: "Last name must be at least 2 characters" }),
+});
+
+export const otpSchema = z.object({
+    secretCode: z
+        .number()
+        .int("OTP must be a whole number.")
+        .min(100000, "OTP must be 6 digits long.") // Minimum 6-digit number
+        .max(999999, "OTP must be 6 digits long."), // Maximum 6-digit number
 });

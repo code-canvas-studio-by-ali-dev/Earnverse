@@ -1,9 +1,14 @@
 "use client";
 
+import generateOTP from "@/utils/opt_generator";
 import { signupSchema } from "@/utils/zod/auth";
 import clsx from "clsx";
 import { useState } from "react";
+import { toast } from "sonner";
 import { z } from "zod";
+import axios from "axios"
+import { useRouter } from "next/navigation";
+import { useStore } from "@/store/authStore";
 
 type SignupData = z.infer<typeof signupSchema>;
 
@@ -11,27 +16,67 @@ export function SignupForm() {
     const [data, setData] = useState<SignupData>({
         email: "",
         password: "",
+        secretCode: 0,
         agreeTerms: false,
         agreeGuidelines: false,
     });
 
     const [errors, setErrors] = useState<Partial<Record<keyof SignupData, string>>>({});
+    const { setToken } = useStore()
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const router = useRouter()
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const parsed = signupSchema.safeParse(data);
-        if (!parsed.success) {
-            const fieldErrors: typeof errors = {};
-            parsed.error.issues.forEach(err => {
-                const field = err.path[0] as keyof SignupData;
-                fieldErrors[field] = err.message;
+
+        // Generate OTP and update hidden field
+        const otp = generateOTP();
+        setData(sec => ({ ...sec, secretCode: Number(otp) }));
+
+        try {
+            // Parse and validate input — Zod errors land here
+            const validData = signupSchema.parse(data);
+
+            // Submit to API
+            const response = await axios.post("/api/v1/auth/signup", validData);
+            const token = response.data.data.token
+            if (response.data.success) {
+                toast.success(response.data.message);
+                setToken(token)
+                router.push(`/auth/verification/${token}`)
+                setErrors({});
+            } else {
+                toast.error(response.data.message || "Signup failed");
+            }
+        } catch (err: unknown) {
+            // Handle Zod validation errors
+            if (err instanceof z.ZodError) {
+                const fieldErrors: typeof errors = {};
+                err.issues.forEach(issue => {
+                    const field = issue.path[0] as keyof SignupData;
+                    fieldErrors[field] = issue.message;
+                });
+                setErrors(fieldErrors);
+                return;
+            }
+
+            // Handle axios or unexpected errors
+            console.error("Signup error:", err);
+            let msg = "Something went wrong";
+            if (axios.isAxiosError(err) && err.response?.data?.message) {
+                msg = err.response.data.message;
+            }
+            toast.error(msg, {
+                action: {
+                    label: "Login",
+                    onClick: () => {
+                        router.push("/auth/login")
+                    }
+                }
             });
-            setErrors(fieldErrors);
-        } else {
-            console.log("Signup data:", parsed.data);
-            setErrors({});
         }
     };
+
 
     return (
         <form aria-labelledby="signup-heading" aria-describedby="signup-info" onSubmit={handleSubmit} className="space-y-4 w-full" >

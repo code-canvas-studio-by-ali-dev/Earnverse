@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Space_Grotesk} from "next/font/google";
+import { Toaster } from 'sonner';
+import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
 const SpaceGrotesk = Space_Grotesk({
@@ -22,6 +23,8 @@ export default function RootLayout({
         className={`${SpaceGrotesk.className} antialiased bg-base-200 w-screen overflow-x-hidden`}
       >
         {children}
+        <Toaster
+        />
       </body>
     </html>
   );
